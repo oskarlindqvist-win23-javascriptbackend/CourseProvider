@@ -13,7 +13,7 @@ public class CourseQuery(ICourseService courseService)
         return await _courseService.GetCoursesAsync();
     }
 
-    [GraphQLName("getAllCourseById")]
+    [GraphQLName("getCourseById")]
     public async Task<Course> GetCourseByIdAsync(string id)
     {
         return await _courseService.GetCourseByIdAsync(id);
