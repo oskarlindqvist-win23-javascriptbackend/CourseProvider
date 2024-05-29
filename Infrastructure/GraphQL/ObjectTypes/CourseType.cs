@@ -1,5 +1,4 @@
-﻿using HotChocolate.Types;
-using Infrastructure.Data.Entities;
+﻿using Infrastructure.Data.Entities;
 
 namespace Infrastructure.GraphQL.ObjectTypes;
 
@@ -20,6 +19,7 @@ public class CourseType : ObjectType<CourseEntity>
         descriptor.Field(c => c.Authors).Type<ListType<AuthorType>>();
         descriptor.Field(c => c.Prices).Type<PricesType>();
         descriptor.Field(c => c.Content).Type<ContentType>();
+        descriptor.Field(c => c.ProgramDetails).Type<ProgramDetailItemType>();
     }
 }
 
@@ -48,7 +48,6 @@ public class ContentType : ObjectType<ContentEntity>
         descriptor.Field(p => p.Description).Type<StringType>();
         descriptor.Field(p => p.Includes).Type<ListType<StringType>>();
         descriptor.Field(p => p.Learn).Type<ListType<StringType>>();
-        descriptor.Field(p => p.ProgramDetails).Type<ListType<ProgramDetailItemType>>();
     }
 }
 
@@ -56,8 +55,11 @@ public class ProgramDetailItemType : ObjectType<ProgramDetailItemEntity>
 {
     protected override void Configure(IObjectTypeDescriptor<ProgramDetailItemEntity> descriptor)
     {
-        descriptor.Field(p => p.Id).Type<IntType>();
-        descriptor.Field(p => p.Title).Type<StringType>();
-        descriptor.Field(p => p.Description).Type<StringType>();
+        descriptor.Field(p => p.Title_1).Type<StringType>();
+        descriptor.Field(p => p.Description_1).Type<StringType>();
+        descriptor.Field(p => p.Title_2).Type<StringType>();
+        descriptor.Field(p => p.Description_2).Type<StringType>();
+        descriptor.Field(p => p.Title_3).Type<StringType>();
+        descriptor.Field(p => p.Description_3).Type<StringType>();
     }
 }

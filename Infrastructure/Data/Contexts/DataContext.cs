@@ -21,6 +21,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
         modelBuilder.Entity<CourseEntity>().HasPartitionKey(x => x.Id);
         modelBuilder.Entity<CourseEntity>().OwnsOne(x => x.Prices);
         modelBuilder.Entity<CourseEntity>().OwnsMany(x => x.Authors);
-        modelBuilder.Entity<CourseEntity>().OwnsOne(x => x.Content, content => content.OwnsMany(x => x.ProgramDetails));
+        modelBuilder.Entity<CourseEntity>().OwnsOne(x => x.Content);
+        modelBuilder.Entity<CourseEntity>().OwnsOne(x => x.ProgramDetails);
     }
 }
