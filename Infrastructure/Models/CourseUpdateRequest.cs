@@ -2,7 +2,7 @@
 
 public class CourseUpdateRequest
 {
-    public string Id { get; set; } = null!;
+    public string? Id { get; set; }
     public string? ImageUri { get; set; }
     public string? ImageHeaderUri { get; set; }
     public bool IsBestseller { get; set; }
@@ -36,6 +36,7 @@ public class ContentUpdateRequest
 {
     public string? Description { get; set; }
     public string[]? Includes { get; set; }
+    public string[]? Learn { get; set; }
     public virtual List<ProgramDetailItemUpdateRequest>? ProgramDetails { get; set; }
 }
 

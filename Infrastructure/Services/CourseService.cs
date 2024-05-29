@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Data.Contexts;
+using Infrastructure.Data.Entities;
 using Infrastructure.Factories;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
@@ -59,13 +60,47 @@ public class CourseService(IDbContextFactory<DataContext> contextFactory) : ICou
 
     public async Task<Course> UpdateCourseAsync(CourseUpdateRequest request)
     {
+        //await using var context = _contextFactory.CreateDbContext();
+        //var existingCourse = await context.Courses.FirstOrDefaultAsync(x =>x.Id == request.Id);
+        //if (existingCourse == null) return null!;
+
+        //var updatedCourseEntity = CourseFactory.Update(request);
+        //updatedCourseEntity.Id = existingCourse.Id;
+        //context.Entry(existingCourse).CurrentValues.SetValues(updatedCourseEntity);
+
+        //await context.SaveChangesAsync();
+        //return CourseFactory.Create(existingCourse);
+
         await using var context = _contextFactory.CreateDbContext();
-        var existingCourse = await context.Courses.FirstOrDefaultAsync(x =>x.Id == request.Id);
+        var existingCourse = await context.Courses
+            .Include(c => c.Authors)
+            .Include(c => c.Prices)
+            .Include(c => c.Content)
+                .ThenInclude(c => c!.ProgramDetails)
+            .FirstOrDefaultAsync(x => x.Id == request.Id);
+
         if (existingCourse == null) return null!;
 
-        var updatedCourseEntity = CourseFactory.Update(request);    // möjligt ändra update till Create
-        updatedCourseEntity.Id = existingCourse.Id;
-        context.Entry(existingCourse).CurrentValues.SetValues(updatedCourseEntity);
+        // Update scalar properties
+        context.Entry(existingCourse).CurrentValues.SetValues(request);
+
+        // Authors
+        existingCourse.Authors!.Clear();
+        existingCourse.Authors.AddRange(request.Authors!.Select(a => new AuthorEntity { Name = a.Name }));
+
+        // Prices
+        if (request.Prices != null)
+        {
+            existingCourse.Prices!.Currency = request.Prices.Currency;
+            existingCourse.Prices.Price = request.Prices.Price;
+            existingCourse.Prices.Discount = request.Prices.Discount;
+        }
+
+        // Content
+        if (request.Content != null)
+        {
+            context.Entry(existingCourse.Content!).CurrentValues.SetValues(request.Content);
+        }
 
         await context.SaveChangesAsync();
         return CourseFactory.Create(existingCourse);

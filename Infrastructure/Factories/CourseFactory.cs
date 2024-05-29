@@ -36,6 +36,7 @@ public static class CourseFactory
             {
                 Description = request.Content.Description,
                 Includes = request.Content.Includes,
+                Learn = request.Content.Learn,
                 ProgramDetails = request.Content.ProgramDetails?.Select(pd => new ProgramDetailItemEntity
                 {
                     Id = pd.Id,
@@ -50,7 +51,7 @@ public static class CourseFactory
     {
         return new CourseEntity
         {
-            Id = request.Id,
+            Id = request.Id!,
             ImageUri = request.ImageUri,
             ImageHeaderUri = request.ImageHeaderUri,
             IsBestseller = request.IsBestseller,
@@ -77,6 +78,7 @@ public static class CourseFactory
             {
                 Description = request.Content.Description,
                 Includes = request.Content.Includes,
+                Learn = request.Content.Learn,
                 ProgramDetails = request.Content.ProgramDetails?.Select(pd => new ProgramDetailItemEntity
                 {
                     Id = pd.Id,
@@ -118,6 +120,7 @@ public static class CourseFactory
             {
                 Description = entity.Content.Description,
                 Includes = entity.Content.Includes,
+                Learn = entity.Content.Learn,
                 ProgramDetails = entity.Content.ProgramDetails?.Select(pd => new ProgramDetailItem
                 {
                     Id = pd.Id,
